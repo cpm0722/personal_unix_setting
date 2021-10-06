@@ -5,7 +5,7 @@ import torch
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--delay', type=int, default=1)
-    parser.add_argument('--size', type=int, default=10000)
+    parser.add_argument('--size', type=int, default=40000)
     parser.add_argument('--device', type=str, default='cuda')
     args = parser.parse_args()
 

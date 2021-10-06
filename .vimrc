@@ -17,7 +17,7 @@ Plugin 'xolox/vim-easytags'                   " ctags extension
 Plugin 'vim-misc'                             " for easytags dependency
 Plugin 'ronakg/quickr-cscope.vim'             " cscope extension
 Plugin 'nathanaelkane/vim-indent-guides'      " indent highlighting
-"Plugin 'AutoClose'                            " Auto bracket Closing
+" Plugin 'AutoClose'                            " Auto bracket Closing
 Plugin 'tComment'                             " easy comment with (ctrl + -) x2
 Plugin 'octol/vim-cpp-enhanced-highlight'     " C++ highlighting
 Plugin 'airblade/vim-gitgutter'               " git diff marking
@@ -140,6 +140,28 @@ autocmd VimEnter * NERDTree  | wincmd p
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
     \ quit | endif
 let NERDTreeIgnore = ['\.out$', '\.o$']
+let g:NERDTreeGitStatusPorcelainVersion = 1
+
+" ===CTAGS===
+set tags=tags,./tags,../tags,../../tags,../../../tags
+let g:easytags_async = 1
+let g:easytags_auto_highlight = 0
+let g:easytags_include_members = 1
+let g:easytags_dynamic_files = 1
+
+" ===CSCOPE===
+function! LoadCscope()  " cscope load function
+    let db = findfile("cscope.out", ".;")
+    if (!empty(db))
+        let path = strpart(db, 0, match(db, "/cscope.out$"))
+        set nocscopeverbose " suppress 'duplicate connection' error
+        exe "cs add " .db ." " . path
+          set cscopeverbose
+    elseif $CSCOPE_DB != ""
+        cs add $CSCOPE_DB
+    endif
+endfunction
+au BufEnter /* call LoadCscope() " load cscope automatically when starting vim
 
 " ===INDENT-GUIDE===
 let g:indent_guides_enable_on_vim_startup = 1
@@ -156,8 +178,10 @@ let g:cpp_experimental_template_highlight = 1
 let g:cpp_concepts_highlight = 1
 let g:cpp_no_function_highlight = 1
 
-" ===jedi-vim===
-let g:jedi#show_call_signatures=0  " hide detail explanation
-let g:jedi#popup_select_first="0"  " popup disable when auto-complete
-let g:jedi#force_py_version=3      " auto-complete with python3
+" " ===jedi-vim===
+" let g:jedi#show_call_signatures=0  " hide detail explanation
+" let g:jedi#popup_select_first="0"  " popup disable when auto-complete
+" let g:jedi#force_py_version=3      " auto-complete with python3
 
+" ===COC-vim===
+let g:coc_node_path = '/usr/bin/nodejs'
