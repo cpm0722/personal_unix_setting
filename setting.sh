@@ -8,4 +8,5 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 mkdir -p ~/.vim/colors
 cp jellybeans.vim  ~/.vim/colors/jellybeans.vim
 cp json_pretty.py ~/.vim/json_pretty.py
+cp .vimrc ~/.vimrc
 vim -c 'PluginInstall' -c 'qa!'
