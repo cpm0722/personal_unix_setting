@@ -5,27 +5,24 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 
-" let VUndle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'                 " Default Plugin
-Plugin 'blueyed/vim-diminactive'              " split focus highlighting
-Plugin 'vim-airline/vim-airline'              " status bar
-Plugin 'vim-airline/vim-airline-themes'       " airline themes
-Plugin 'majutsushi/tagbar'                    " function, variable navigator
+Plugin 'VundleVim/Vundle.vim'                 " Plugin Vundle
 Plugin 'scrooloose/nerdtree'                  " file structure navigator
 Plugin 'Xuyuanp/nerdtree-git-plugin'          " nerd tree with git status
-Plugin 'xolox/vim-easytags'                   " ctags extension
-Plugin 'vim-misc'                             " for easytags dependency
-Plugin 'ronakg/quickr-cscope.vim'             " cscope extension
-Plugin 'nathanaelkane/vim-indent-guides'      " indent highlighting
-" Plugin 'AutoClose'                            " Auto bracket Closing
-Plugin 'tComment'                             " easy comment with (ctrl + -) x2
-Plugin 'octol/vim-cpp-enhanced-highlight'     " C++ highlighting
+Plugin 'blueyed/vim-diminactive'              " split focus highlighting
+Plugin 'vim-airline/vim-airline'              " status bar & buffer tab
+Plugin 'vim-airline/vim-airline-themes'       " airline themes
 Plugin 'airblade/vim-gitgutter'               " git diff marking
-" Plugin 'davidhalter/jedi-vim'                 " Python auto-complete
-" Plugin 'ervandew/supertab'					  " Python auto-complete with Tab key
-Plugin 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
-Plugin 'hynek/vim-python-pep8-indent'         " Python auto-indent
+Plugin 'tComment'                             " easy comment with (ctrl + -) x2
+
+" Language support
 Plugin 'nvie/vim-flake8'                      " Python grammar check
+Plugin 'hynek/vim-python-pep8-indent'         " Python auto-indent
+Plugin 'octol/vim-cpp-enhanced-highlight'     " C++ highlighting
+Plugin 'JamshedVesuna/vim-markdown-preview'   " Markdown preview
+Plugin 'mattn/emmet-vim'                      " HTML auto-complete (,,)
+Plugin 'pangloss/vim-javascript'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'maxmellon/vim-jsx-pretty'
 
 call vundle#end()  " required
 
@@ -41,7 +38,7 @@ command! -bang WQ wq<bang> " alias :WQ to :wq
 command! -bang Wq wq<bang> " alias :Wq to :Wq
 
 if has("syntax")           " syntax highlighting
-  syntax on
+    syntax on
 endif
 
 set encoding=utf-8         " default encoding: utf-8
@@ -60,7 +57,8 @@ set laststatus=2           " always show status in bottom bar
 set autoindent             " auto indent
 set shiftwidth=4           " indent width: 4
 set tabstop=4              " tab width: 4
-"set expandtab             " replace tab to space when saving
+set softtabstop=4          " tab width: 4
+set expandtab              " replace tab to space when saving
 set nowrap                 " do not auto line breaking
 set list listchars=tab:▸\ ,trail:·,precedes:←,extends:→ " indicate tab & space
 
@@ -89,22 +87,41 @@ endfunction
 " |     FILE TYPES     |
 " ======================
 "
+" ======================
+" |     FILE TYPES     |
+" ======================
+"
 " === C / C++ ===
-au BufRead,BufNewFile *.c,*.cpp,*.h set cindent        " C indent
-au BufRead,BufNewFile *.c,*.cpp,*.h set smartindent    " indent disable for preprocessor
-au BufRead,BufNewFile *.c,*.cpp,*.h set shiftwidth=2   " indent width: 2
-au BufRead,BufNewFile *.c,*.cpp,*.h set tabstop=2      " tab width: 2
-au BufRead,BufNewFile *.c,*.cpp,*.h set expandtab      " replace tab to space when saving
-" au BufRead,BufNewFile *.c,*.cpp,*.h set shiftwidth=4   " indent width: 2
-" au BufRead,BufNewFile *.c,*.cpp,*.h set tabstop=4      " tab width: 2
-au BufRead,BufNewFile *.c,*.cpp,*.h call MaxWidth()    " max width: 80 highlighting
+au BufRead,BufNewFile *.c,*.cpp,*.h set cindent           " C indent
+au BufRead,BufNewFile *.c,*.cpp,*.h set smartindent       " indent disable for preprocessor
+" au BufRead,BufNewFile *.c,*.cpp,*.h set shiftwidth=2      " indent width: 2
+" au BufRead,BufNewFile *.c,*.cpp,*.h set tabstop=2         " tab width: 2
+" au BufRead,BufNewFile *.c,*.cpp,*.h set expandtab         " replace tab to space when saving
+au BufRead,BufNewFile *.c,*.cpp,*.h set shiftwidth=4      " indent width: 2
+au BufRead,BufNewFile *.c,*.cpp,*.h set tabstop=4         " tab width: 2
+au BufRead,BufNewFile *.c,*.cpp,*.h set softtabstop=4     " tab width: 2
+au BufRead,BufNewFile *.c,*.cpp,*.h call MaxWidth()       " max width: 80 highlighting
+
+" === HTML / CSS / Javascript ===
+au BufRead,BufNewFile *.html,*.css,*.js set shiftwidth=2  " indent width: 2
+au BufRead,BufNewFile *.html,*.css,*.js set tabstop=2     " tab width: 2
+au BufRead,BufNewFile *.html,*.css,*.js set softtabstop=2 " tab width: 2
+au BufRead,BufNewFile *.html,*.css,*.js set expandtab     " replace tab to space when saving
+
+" === JSON ===
+au BufRead,BufNewFile *.json set shiftwidth=2
+au BufRead,BufNewFile *.json set tabstop=2
+au BufRead,BufNewFile *.json set softtabstop=2
+au BufRead,BufNewFile *.json set noexpandtab
 
 " === PYTHON === 
-
 let python_version_3 = 1
 let python_highlight_all = 1
-" run with python
-au FileType python map <f2> : !python3 %
+" execute python
+au FileType python map <f2> : !clear && python3 %<CR>
+au BufRead,BufNewFile *.py set shiftwidth=2
+au BufRead,BufNewFile *.py set tabstop=2
+au BufRead,BufNewFile *.py set softtabstop=2
 
 " ====================
 " |      PLUGINS     |
@@ -121,50 +138,27 @@ let g:diminactive_enable_focus = 1
 let g:airline#extensions#tabline#enabled = 1 " enable buffer list
 let g:airline_themes = 'zenburn'
 set laststatus=2 " enable bottom bar
-" prev/next latest file open key mapping
+" goto previous file buffer
 nmap <leader>q :bp<CR> 
+" goto next file buffer
 nmap <leader>w :bn<CR>
-
-" ===TAGBAR===
-let g:tagbar_ctags_bin = '/opt/homebrew/bin/ctags'
-nmap <F12> :TagbarToggle<CR>
+" remove current file buffer
+nmap <leader>e :bp\|bd #<CR>
 
 " ===NERDTREE===
 nmap <F11> :NERDTreeToggle<CR>
 let NERDTreeWinPos = "left"
 " open file with enter key: vsplit
 let NERDTreeCustomOpenArgs = {'file': {'where': 'v', 'keepopen': 1, 'stay': 1}, 'dir': {}}
-" open NERDTree automatically when starting vim (change focus)
+" open NERDTree automatically when starting vim (change focus to file)
 autocmd VimEnter * NERDTree  | wincmd p
-" exit vim when rest split window is only NERDTree
+" exit vim when NERDTree exists alone
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
     \ quit | endif
 let NERDTreeIgnore = ['\.out$', '\.o$']
-let g:NERDTreeGitStatusPorcelainVersion = 1
-
-" ===CTAGS===
-set tags=tags,./tags,../tags,../../tags,../../../tags
-let g:easytags_async = 1
-let g:easytags_auto_highlight = 0
-let g:easytags_include_members = 1
-let g:easytags_dynamic_files = 1
-
-" ===CSCOPE===
-function! LoadCscope()  " cscope load function
-    let db = findfile("cscope.out", ".;")
-    if (!empty(db))
-        let path = strpart(db, 0, match(db, "/cscope.out$"))
-        set nocscopeverbose " suppress 'duplicate connection' error
-        exe "cs add " .db ." " . path
-          set cscopeverbose
-    elseif $CSCOPE_DB != ""
-        cs add $CSCOPE_DB
-    endif
-endfunction
-au BufEnter /* call LoadCscope() " load cscope automatically when starting vim
-
-" ===INDENT-GUIDE===
-let g:indent_guides_enable_on_vim_startup = 1
+" prohibit NERDTree window has changed to another buffer file
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
 " ===GIT-GUTTER===
 let g:gitgutter_enabled = 1
@@ -178,10 +172,36 @@ let g:cpp_experimental_template_highlight = 1
 let g:cpp_concepts_highlight = 1
 let g:cpp_no_function_highlight = 1
 
-" " ===jedi-vim===
-" let g:jedi#show_call_signatures=0  " hide detail explanation
-" let g:jedi#popup_select_first="0"  " popup disable when auto-complete
-" let g:jedi#force_py_version=3      " auto-complete with python3
+" ===jedi-vim===
+let g:jedi#show_call_signatures=0  " hide detail explanation
+let g:jedi#popup_select_first="0"  " popup disable when auto-complete
+let g:jedi#force_py_version=3      " auto-complete with python3
 
-" ===COC-vim===
-let g:coc_node_path = '/usr/bin/nodejs'
+" ===emmet-vim===
+let g:user_emmet_leader_key=','    " html auto complete with ,,
+let g:loaded_tabline = 0
+
+" ===markdown-preview===
+let vim_markdown_preview_toggle=1
+let vim_markdown_preview_github=1
+let vim_markdown_preview_hotkey='<C-m>'
+
+" markdown image format을 html img tag로 변경하며 notion server path에서 local path로 변경하는 함수
+function! Img(path)
+    :%s/!\[.*\](/\<img src="/g
+    :%s/.jpg)/.jpg">/g
+    exe ':%s/https:\/\/s3-us-west-2.amazonaws.com\/secure.notion-static.com\/.*\//\/images\/' . a:path . '\//g'
+    :%s/\\\//\//g
+endfunction
+
+" html img tag에서 width 변경하는 함수
+function! Size(width)
+    let line = getline('.')
+    " let line = join([split(line, '>')[0], '"width=' . a:width . '%">'])
+    let line = join([split(split(line, '>')[0], ' width=')[0], 'width="' . a:width . '%">'])
+    call setline('.', line)
+endfunction
+
+function! Json()
+    :%!python3 ~/.vim/json_pretty.py
+endfunction
