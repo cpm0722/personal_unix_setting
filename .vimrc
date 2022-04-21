@@ -26,6 +26,9 @@ Plugin 'maxmellon/vim-jsx-pretty'
 
 call vundle#end()  " required
 
+" ===COLOR SCHEME===
+colorscheme onedark
+
 " ======================
 " |   GLOBAL SETTING   |
 " ======================
@@ -87,10 +90,6 @@ endfunction
 " |     FILE TYPES     |
 " ======================
 "
-" ======================
-" |     FILE TYPES     |
-" ======================
-"
 " === C / C++ ===
 au BufRead,BufNewFile *.c,*.cpp,*.h set cindent           " C indent
 au BufRead,BufNewFile *.c,*.cpp,*.h set smartindent       " indent disable for preprocessor
@@ -127,9 +126,6 @@ au BufRead,BufNewFile *.py set softtabstop=2
 " |      PLUGINS     |
 " ====================
 let mapleader = ','
-
-" ===JELLYBEANS===
-colorscheme jellybeans
 
 " ===DIMINACTIVE===
 let g:diminactive_enable_focus = 1
